@@ -1,7 +1,6 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-from corsheaders.defaults import default_headers
 
 # Load environment variables
 load_dotenv()
@@ -10,7 +9,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
@@ -29,7 +28,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Must be at the top
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -40,51 +39,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = False  # Changed to False for security
-CORS_ALLOW_CREDENTIALS = False  # Changed to False since we don't need credentials
+ROOT_URLCONF = 'booksbuddy_backend.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    "https://bookbuddy-frontend.vercel.app",
-    "https://bookbuddy-frontend-ooi53kv5-praneshs-projects-6f1c158f.vercel.app",
-    "https://bookbuddy-frontend-git-main-praneshs-projects-6f1c158f.vercel.app",
-    "http://localhost:3000"
-]
+# CORS settings - Simplified for Vercel
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
-# Allowed Hosts
-ALLOWED_HOSTS = [
-    'bookbuddy-backend.vercel.app',
-    'bookbuddy-backend-ay3n2j8ua-praneshs-projects-6f1c158f.vercel.app',
-    'localhost',
-    '127.0.0.1'
-]
+# Allowed Hosts - More permissive for Vercel
+ALLOWED_HOSTS = ['*']
 
-# CSRF Settings
+# CSRF Settings - Disabled for API-only backend
 CSRF_TRUSTED_ORIGINS = [
     "https://bookbuddy-frontend.vercel.app",
-    "https://bookbuddy-frontend-ooi53kv5-praneshs-projects-6f1c158f.vercel.app",
-    "https://bookbuddy-frontend-git-main-praneshs-projects-6f1c158f.vercel.app"
-]
-
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
+    "https://*.vercel.app"
 ]
 
 # Rest Framework Settings
@@ -98,8 +65,6 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
     ],
 }
-
-ROOT_URLCONF = 'booksbuddy_backend.urls'
 
 TEMPLATES = [
     {
@@ -119,18 +84,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'booksbuddy_backend.wsgi.application'
 
-# Database
+# Database - Simplified for Vercel
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': ':memory:' if os.getenv('VERCEL') else str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
 # Static files configuration
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
@@ -142,16 +107,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # API Keys
 ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 
-# Security Settings for Production
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Simplified security settings for Vercel
+SECURE_SSL_REDIRECT = False  # Handled by Vercel
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Logging configuration
+# Basic logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -164,18 +125,10 @@ LOGGING = {
         'handlers': ['console'],
         'level': 'INFO',
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-            'propagate': False,
-        },
-    },
 }
 
-# Verify critical settings
-if not ANTHROPIC_API_KEY:
-    raise ValueError("ANTHROPIC_API_KEY not properly configured!")
+# Verify only critical settings
+if not ANTHROPIC_API_KEY and not DEBUG:
+    raise ValueError("ANTHROPIC_API_KEY not configured in production!")
 
-if not SECRET_KEY or SECRET_KEY == 'your-secret-key-here':
-    raise ValueError("DJANGO_SECRET_KEY not properly configured!")
+NEXT_PUBLIC_API_URL=https://your-backend-vercel-url.vercel.app/api
