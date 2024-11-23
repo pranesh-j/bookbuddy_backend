@@ -10,6 +10,7 @@ from .services.claude_service import simplify_text, suggest_title
 from anthropic import Anthropic
 from django.conf import settings
 import logging
+import os
 logger = logging.getLogger(__name__)
 
 @api_view(['GET'])
@@ -137,3 +138,11 @@ def upload_image(request):
 @api_view(['GET'])
 def health_check(request):
     return Response({"status": "ok", "message": "API is working!"})
+
+@api_view(['GET'])
+def test_endpoint(request):
+    return Response({
+        "status": "ok",
+        "django_configured": True,
+        "anthropic_key_exists": bool(os.getenv('ANTHROPIC_API_KEY'))
+    })

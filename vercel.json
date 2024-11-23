@@ -11,6 +11,10 @@
             "dest": "/static/$1"
         },
         {
+            "src": "/api/(.*)",
+            "dest": "booksbuddy_backend/wsgi.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "booksbuddy_backend/wsgi.py"
         }

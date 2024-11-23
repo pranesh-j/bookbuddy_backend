@@ -9,4 +9,5 @@ urlpatterns = [
     path('process/', views.process_text, name='process-text'),
     path('upload-image/', views.upload_image, name='upload-image'),
     path('health/', views.health_check, name='health-check'),
+    path('test/', views.test_endpoint, name='test-endpoint'),
 ]
