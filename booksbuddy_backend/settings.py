@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from corsheaders.defaults import default_headers
+
 # Load environment variables
 load_dotenv()
 
@@ -13,16 +14,6 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
-
-ALLOWED_HOSTS = [
-    '*',
-    '.vercel.app',
-    'localhost',
-    '127.0.0.1',
-    'bookbuddy-backend-q7kx9r8xt-praneshs-projects-6f1c158f.vercel.app'
-]
 
 # Application definition
 INSTALLED_APPS = [
@@ -38,7 +29,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Move this to top
+    'corsheaders.middleware.CorsMiddleware',  # Must be at the top
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -47,6 +38,45 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "https://bookbuddy-frontend.vercel.app",
+    "https://bookbuddy-frontend-cokuzli9m-praneshs-projects-6f1c158f.vercel.app",
+    "http://localhost:3000"
+]
+
+ALLOWED_HOSTS = [
+    '*',
+    '.vercel.app',
+    'bookbuddy-backend-q7kx9r8xt-praneshs-projects-6f1c158f.vercel.app',
+    'localhost',
+    '127.0.0.1'
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 ]
 
 ROOT_URLCONF = 'booksbuddy_backend.urls'
@@ -69,23 +99,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'booksbuddy_backend.wsgi.application'
 
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    'access-control-allow-origin',
-]
-
-
-# Simplified Database configuration
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -107,6 +121,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # API Keys
 ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
+
+# Security Settings for Production
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Verify critical settings
 if not ANTHROPIC_API_KEY:
