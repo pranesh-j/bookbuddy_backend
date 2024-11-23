@@ -8,24 +8,7 @@
     "routes": [
         {
             "src": "/api/(.*)",
-            "methods": ["OPTIONS"],
-            "dest": "booksbuddy_backend/wsgi.py",
-            "headers": {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization",
-                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-                "Access-Control-Allow-Credentials": "true"
-            }
-        },
-        {
-            "src": "/api/(.*)",
-            "dest": "booksbuddy_backend/wsgi.py",
-            "headers": {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization",
-                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-                "Access-Control-Allow-Credentials": "true"
-            }
+            "dest": "booksbuddy_backend/wsgi.py"
         },
         {
             "src": "/(.*)",
