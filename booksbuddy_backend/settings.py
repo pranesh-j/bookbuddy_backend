@@ -44,12 +44,16 @@ MIDDLEWARE = [
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
+# settings.py
 CORS_ALLOWED_ORIGINS = [
     "https://bookbuddy-frontend.vercel.app",
     "https://bookbuddy-frontend-ooi53kv5-praneshs-projects-6f1c158f.vercel.app",
     "https://bookbuddy-frontend-git-main-praneshs-projects-6f1c158f.vercel.app",
     "http://localhost:3000"
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Temporarily set to True for testing
+CORS_ALLOW_CREDENTIALS = True
 
 ALLOWED_HOSTS = [
     '*',
