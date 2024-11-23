@@ -45,8 +45,7 @@ ROOT_URLCONF = 'booksbuddy_backend.urls'
 # CORS settings - Simplified for Vercel
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://bookbuddy-frontend.onrender.com",
-    "https://bookbuddy-backend-i99j.onrender.com"
+    "https://bookbuddy-frontend-nu2s.onrender.com"
 ]
 
 # Allowed Hosts - More permissive for Vercel
