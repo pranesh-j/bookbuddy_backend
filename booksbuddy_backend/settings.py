@@ -47,17 +47,23 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://bookbuddy-frontend.vercel.app",
     "https://bookbuddy-frontend-ooi53kv5-praneshs-projects-6f1c158f.vercel.app",
+    "https://bookbuddy-frontend-git-main-praneshs-projects-6f1c158f.vercel.app",
     "http://localhost:3000"
 ]
 
 ALLOWED_HOSTS = [
     '*',
     '.vercel.app',
-    'bookbuddy-backend-q7kx9r8xt-praneshs-projects-6f1c158f.vercel.app',
+    'bookbuddy-backend-2f6xdk2dy-praneshs-projects-6f1c158f.vercel.app',
     'localhost',
     '127.0.0.1'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://bookbuddy-frontend.vercel.app",
+    "https://bookbuddy-frontend-ooi53kv5-praneshs-projects-6f1c158f.vercel.app",
+    "https://bookbuddy-frontend-git-main-praneshs-projects-6f1c158f.vercel.app"
+]
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
