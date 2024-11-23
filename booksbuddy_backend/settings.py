@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load environment variables
 load_dotenv()
@@ -42,16 +43,21 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'booksbuddy_backend.urls'
 
 # CORS settings - Simplified for Vercel
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://bookbuddy-frontend.onrender.com"  # Your frontend URL
+]
 
 # Allowed Hosts - More permissive for Vercel
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.onrender.com'  # Allow all Render subdomains
+]
 
 # CSRF Settings - Disabled for API-only backend
 CSRF_TRUSTED_ORIGINS = [
-    "https://bookbuddy-frontend.vercel.app",
-    "https://*.vercel.app"
+    "https://*.onrender.com"
 ]
 
 # Rest Framework Settings
@@ -86,10 +92,10 @@ WSGI_APPLICATION = 'booksbuddy_backend.wsgi.application'
 
 # Database - Simplified for Vercel
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:' if os.getenv('VERCEL') else str(BASE_DIR / 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600
+    )
 }
 
 # Static files configuration

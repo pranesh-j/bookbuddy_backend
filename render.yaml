@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: bookbuddy-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn booksbuddy_backend.wsgi:application
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: PYTHON_VERSION
+        value: 3.9.0
+    autoDeploy: true 
