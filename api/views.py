@@ -137,12 +137,13 @@ def upload_image(request):
 
 @api_view(['GET'])
 def health_check(request):
-    return Response({"status": "ok", "message": "API is working!"})
+    """Simple health check endpoint"""
+    return Response({"status": "healthy"}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def test_endpoint(request):
+    """Test endpoint to verify API functionality"""
     return Response({
-        "status": "ok",
-        "django_configured": True,
-        "anthropic_key_exists": bool(os.getenv('ANTHROPIC_API_KEY'))
-    })
+        "message": "API is working!",
+        "environment": "production" if os.getenv('VERCEL') else "development"
+    }, status=status.HTTP_200_OK)
