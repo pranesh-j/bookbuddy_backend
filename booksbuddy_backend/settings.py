@@ -131,4 +131,4 @@ LOGGING = {
 if not ANTHROPIC_API_KEY and not DEBUG:
     raise ValueError("ANTHROPIC_API_KEY not configured in production!")
 
-NEXT_PUBLIC_API_URL=https://your-backend-vercel-url.vercel.app/api
+NEXT_PUBLIC_API_URL = "https://your-backend-vercel-url.vercel.app/api"
