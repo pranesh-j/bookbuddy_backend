@@ -131,4 +131,5 @@ LOGGING = {
 if not ANTHROPIC_API_KEY and not DEBUG:
     raise ValueError("ANTHROPIC_API_KEY not configured in production!")
 
-NEXT_PUBLIC_API_URL = "https://your-backend-vercel-url.vercel.app/api"
+# Update this to your actual backend URL
+NEXT_PUBLIC_API_URL = "https://bookbuddy-backend.vercel.app/api"
