@@ -9,6 +9,8 @@ from .serializers import BookSerializer
 from .services.claude_service import simplify_text, suggest_title
 from anthropic import Anthropic
 from django.conf import settings
+import logging
+logger = logging.getLogger(__name__)
 
 @api_view(['GET'])
 def get_all_books(request):
@@ -17,37 +19,40 @@ def get_all_books(request):
     serializer = BookSerializer(books, many=True)
     return Response(serializer.data)
 
+import logging
+logger = logging.getLogger(__name__)
+
 @api_view(['POST'])
 def process_text(request):
-    """Handle text processing and simplification"""
-    text = request.data.get('text', '')
-    if not text:
-        return Response(
-            {'error': 'No text provided'}, 
-            status=status.HTTP_400_BAD_REQUEST
-        )
-    
+    logger.info(f"Request received: {request.data}")
     try:
+        text = request.data.get('text', '')
+        if not text:
+            return Response(
+                {'error': 'No text provided'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         # Create new book
         book = Book.objects.create(original_text=text)
+        
+        # Log before Claude API call
+        logger.info("Calling Claude API for text simplification")
         
         # Simplify text using Claude
         simplified_text = simplify_text(text)
         
+        # Log after Claude API call
+        logger.info("Claude API call successful")
+        
         # Process and create pages
         book.process_text(simplified_text)
 
-        # Get suggested title if it's the first page
-        if book.total_pages == 1:
-            suggested_title = suggest_title(text)
-            book.title = suggested_title
-            book.save()
-        
         serializer = BookSerializer(book)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
         
     except Exception as e:
-        print(f"Error processing text: {str(e)}")
+        logger.error(f"Error in process_text: {str(e)}")
         return Response(
             {'error': str(e)}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
